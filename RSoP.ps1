@@ -1,4 +1,20 @@
- Add-Type -AssemblyName Microsoft.Office.Interop.Excel
+######################################################################################
+##                        RESULTANT SET of POLICY XML PARSER                        ##
+##                                by Ken Spera, CISA                                ##
+##                                                                                  ##
+## Last Update: 6/23/2017                                                           ##
+##                                                                                  ##
+## Description:                                                                     ##
+## Parses XML-formatted Resutant Set of Policy reports (GPResult) into more useful  ##	
+## Excel (.xlsx) format. For each policy returned in the RSoP Report, the policy    ##
+## type (Computer vs. User), winning GPO, policy name, state, description,          ##
+## supported versions, and all configurations falling under the policy are returned ##
+## and formatted to an Excel table.                                                 ##
+######################################################################################
+
+
+
+Add-Type -AssemblyName Microsoft.Office.Interop.Excel
 $xlFixedFormat = [Microsoft.Office.Interop.Excel.XlFileFormat]::xlWorkbookDefault
 $xl = new-object -comobject excel.application
 $rsop = @()

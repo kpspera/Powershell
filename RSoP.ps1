@@ -4,6 +4,10 @@
 ##                                                                                  ##
 ## Last Update: 6/23/2017                                                           ##
 ##                                                                                  ##
+## Arguments:                                                                       ##
+## Accempts computername as argument. Ensure that source XML file is named as       ##
+## [COMPUTERNAME]-RSOP.xml and is in the same folder as this script.                ##
+##                                                                                  ##
 ## Description:                                                                     ##
 ## Parses XML-formatted Resutant Set of Policy reports (GPResult) into more useful  ##	
 ## Excel (.xlsx) format. For each policy returned in the RSoP Report, the policy    ##

@@ -1,0 +1,24 @@
+Function Invoke-cPasteExcel {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]$File,
+        [String]$SheetName,
+        $Data
+    )
+
+    BEGIN {
+        If ($SheetName -ne $null) {$sn = $SheetName}
+        Else {$sn = 'Sheet1'}
+    }
+
+    PROCESS {
+        $WB = $File.Workbooks.Item(1)
+        $Cells = $WB.Worksheets.Item($sn).Cells
+        $Data | ConvertTo-Csv -Delimiter "`t" -NoTypeInformation | Clip
+        $Cells.Item(1).PasteSpecial() | Out-Null
+        $null | Clip
+    }
+
+    END {
+    }
+}

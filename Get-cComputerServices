@@ -1,0 +1,33 @@
+Function Get-cComputerServices {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)][String[]]$ComputerName
+    )
+
+    BEGIN {
+        $OutList = @()
+    }
+
+    PROCESS {
+        ForEach ($cn in $ComputerName) {
+            $Services = Get-Service -ComputerName $cn
+            ForEach ($Svc in $Services) {
+                $outProps = [Ordered]@{
+                            'MachineName'=$Svc.MachineName;
+                            'ServiceName'=$Svc.ServiceName;
+                            'Status'=$Svc.Status
+                            'StartType'=$Svc.StartType;
+                            'ServiceType'=$Svc.ServiceType;
+                            'DisplayName'=$Svc.DisplayName;
+                            'CanStop'=$Svc.CanStop
+                            }
+                $OutObj = New-Object -TypeName PSObject -Property $OutProps
+                $OutList += $OutObj
+            }
+        }
+    }
+
+    END {
+        Write-Output $OutList
+    }
+}

@@ -1,0 +1,43 @@
+Function New-cExcelFile {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)][String]$Path,
+        [String[]]$AddSheets,
+        [Switch]$Visible
+    )
+
+    BEGIN {
+        If ($AddSheets -ne $null) {$SheetSwitch = $True;$NewCount = $AddSheets.Count}
+        Else {$SheetSwitch = $False}
+    }
+
+    PROCESS {
+        $tExcel = New-Object -ComObject Excel.Application
+        $tExcel.DisplayAlerts = $False
+        $tExcelWB = $tExcel.Workbooks.Add()
+        $tExcel.Visible = $Visible
+        $SheetCount = $tExcelWB.Worksheets.Count()
+            
+        If ($SheetSwitch) {
+            For ($i=0;$i -lt $NewCount;$i++) {
+                $SheetNum = $i+1
+                Try {
+                    $NewSheet = $tExcelWB.Worksheets.Item($SheetNum)
+                    $NewSheet.Name = $AddSheets[$i]
+                } Catch {
+                    $NewSheet = $tExcelWB.Worksheets.Add()
+                    $NewSheet.Name = $AddSheets[$i]
+                    $NewSheet.Move([System.Reflection.Missing]::Value,$tExcelWB.Worksheets.Item($SheetNum))
+                }
+            }
+        }
+
+        $tExcelWB.SaveAs($Path) | Out-Null
+        Write-Output $tExcel       
+    }
+
+    END {
+        $TestFile = Test-Path -Path $Path
+        If ($TestFile -ne $True) {Write-Error -Message "File not successfully created."}
+    }
+}

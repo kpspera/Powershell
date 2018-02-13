@@ -1,0 +1,34 @@
+Function Get-cComputerProcesses {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)][String[]]$ComputerName
+    )
+
+    BEGIN {
+        $OutList = @()
+    }
+
+    PROCESS {
+        ForEach ($cn in $ComputerName) {
+            $Processes = Get-Process -ComputerName $cn
+            ForEach ($Prc in $Processes) {
+                $outProps = [Ordered]@{
+                            'MachineName'=$Prc.MachineName;
+                            'ProcessName'=$Prc.ProcessName;
+                            'ID'=$Prc.ID;
+                            'Responding'=$Prc.Responding;
+                            'Description'=$Prc.Description;
+                            'Product'=$Prc.Product;
+                            'ProductVersion'=$Prc.ProductVersion;
+                            'Path'=$Prc.Path
+                            }
+                $OutObj = New-Object -TypeName PSObject -Property $OutProps
+                $OutList += $OutObj
+            }
+        }
+    }
+
+    END {
+        Write-Output $OutList
+    }
+}

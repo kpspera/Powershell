@@ -1,0 +1,22 @@
+Function Invoke-cExcelCreateTable {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]$File,
+        [String]$SheetName
+    )
+
+    BEGIN {
+        If ($SheetName -ne $null) {$sn = $SheetName}
+        Else {$SheetName = 'Sheet1'}
+    }
+
+    PROCESS {
+        $WS = $File.Workbooks.Item(1).Worksheets.Item($sn)
+        $Cells = $WS.UsedRange()
+        $Table = $WS.ListObjects.Add(1,$Cells,0,1)
+        $Cells.EntireColumn.AutoFit() | Out-Null
+    }
+
+    END {
+    }
+}

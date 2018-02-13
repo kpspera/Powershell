@@ -1,0 +1,22 @@
+Function Invoke-cExcelSaveClose {
+    [CmdletBinding()]
+    Param(
+        [Parameter(Mandatory=$True)]$File
+    )
+
+    Begin {
+        $WBCount = $File.Workbooks.Count()
+    }
+
+    PROCESS {
+        For ($i=1;$i -le $WBCount;$i++) {
+            $File.Workbooks.Item($i).Save()
+            $File.WorkBooks.Item($i).Close()
+        }
+    }
+
+    END {
+        $File.Quit()
+        Stop-Process -Name EXCEL -ErrorAction SilentlyContinue | Where-Object {$_.MainWindowTitle -eq $Null}
+    }
+}
